@@ -7,5 +7,6 @@
   "license": "MIT",
   "devDependencies": {
     "cypress": "12.2.0"
-  }
+  },
+  "repository": "https://github.com/felipedanielsousa/cypress-express-mark.git"
 }
