@@ -6,14 +6,7 @@ describe('tarefas', ()=>{
         
         const taskName = 'Ler um livro de node.js'
         
-        cy.request({
-            url: 'http://localhost:3333/helper/tasks',
-            method: 'DELETE',
-            body: {name: 'taskName'}
-        }).then(response => {
-            expect(response.status).to.eq(204)
-        })
-
+        cy.removeTaskByName(taskName)
         cy.createTask(taskName)
         
         cy.contains('main div p',taskName)
@@ -27,22 +20,8 @@ describe('tarefas', ()=>{
             is_done: false
         }
         
-        cy.request({
-            url: 'http://localhost:3333/helper/tasks',
-            method: 'DELETE',
-            body: {name: task.name}
-        }).then(response => {
-            expect(response.status).to.eq(204)
-        })
-        
-        cy.request({
-             url: 'http://localhost:3333/tasks',
-             method: 'POST',
-             body: task
-        }).then(response => {
-            expect(response.status).to.eq(201)
-        })
-
+        cy.removeTaskByName(task.name)
+        cy.postTask(task)
         cy.createTask(task.name)
 
         cy.get('.swal2-html-container')
@@ -50,14 +29,9 @@ describe('tarefas', ()=>{
             .should('have.text', 'Task already exists!')
     })
 
+    it('Campo obrigatório', () => {
+        cy.createTask()
+        cy.isRequired('This is a required field')
+    })
 })
 
-Cypress.Commands.add('createTask', (taskName) => {
-        
-    cy.visit('http://localhost:8080')
-
-    cy.get('input[placeholder="Add a new Task"]')
-        .type(taskName)
-    ////button[contains(text(), "Create")]
-    cy.contains('button', 'Create').click()
-})
